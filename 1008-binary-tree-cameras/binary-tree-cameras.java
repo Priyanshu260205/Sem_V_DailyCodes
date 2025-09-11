@@ -20,7 +20,7 @@ class Solution {
         if(cam_min == -1){
             Camera++;
         }
-        return Camera++;
+        return Camera;
     }
     public int minCamera(TreeNode root) {
         if(root == null){
