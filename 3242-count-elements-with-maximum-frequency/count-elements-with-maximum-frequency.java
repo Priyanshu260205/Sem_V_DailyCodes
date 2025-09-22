@@ -9,9 +9,9 @@ class Solution {
         }
 
         int res = 0;
-        for(int i: map.keySet()){
-            if(map.get(i) == max_freq){
-                res += map.get(i);
+        for(int i: map.values()){
+            if(i == max_freq){
+                res += i;
             }
         }
         return res ;
