@@ -4,11 +4,8 @@ class Solution {
         int i = nums.length-1;
 
         while(i >= 2){
-            int a = nums[i-2];
-            int b = nums[i-1];
-            int c = nums[i];
-            if(a+b > c){
-                return a+b+c;
+            if(nums[i-2]+nums[i-1] > nums[i]){
+                return nums[i-2]+nums[i-1]+nums[i];
             }
             i--;
         }
