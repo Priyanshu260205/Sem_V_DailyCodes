@@ -7,13 +7,8 @@ class Solution {
         while(pq.size() > 1){
             int p1 = pq.poll();
             int p2 = pq.poll();
-            if(p1 != p2){
-                pq.offer(p1 - p2);
-            }
+            pq.offer(p1 - p2);
         }
-        if(pq.size() > 0){
-            return pq.peek();
-        }
-        return 0;
+        return pq.peek();
     }
 }
