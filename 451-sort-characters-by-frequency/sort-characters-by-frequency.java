@@ -1,30 +1,31 @@
 class Solution {
+    class Pair{
+        char e;
+        int freq;
+        Pair(char el, int freq){
+            this.e = el;
+            this.freq = freq;
+        }
+    }
     public String frequencySort(String s) {
-                if (s == null || s.length() == 0) {
+        if(s == null || s.length() == 0){
             return s;
         }
-        Map<Character, Integer> map = new HashMap<>();
-        int maxFreq = Integer.MIN_VALUE;
-        for (char ch : s.toCharArray()) {
-            map.put(ch, map.getOrDefault(ch, 0) + 1);
-            maxFreq = Math.max(maxFreq, map.get(ch));
+        HashMap<Character, Integer> map = new HashMap<>();
+        for(char i : s.toCharArray()){
+            map.put(i, map.getOrDefault(i, 0)+1);
         }
-        List<List<Character>> buckets = new ArrayList<>();
-        for (int i = 0; i <= maxFreq; i++) {
-            buckets.add(new ArrayList<Character>());
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b) -> b.freq - a.freq);
+        for(char i : map.keySet()){
+            pq.offer(new Pair(i, map.get(i)));
         }
-        for (Character key : map.keySet()) {
-            int freq = map.get(key);
-            buckets.get(freq).add(key);
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int bucketVal = buckets.size() - 1; bucketVal >= 1; bucketVal--) {
-            for (Character ch : buckets.get(bucketVal)) {
-                for (int val = 0; val < bucketVal; val++) {
-                    sb.append(ch);
-                }
+        String res = "";
+        while(!pq.isEmpty()){
+            Pair r = pq.poll();
+            for(int i=0; i<r.freq; i++){
+                res += r.e;
             }
         }
-        return sb.toString();
+        return res;
     }
 }
