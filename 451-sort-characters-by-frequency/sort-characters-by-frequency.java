@@ -19,13 +19,13 @@ class Solution {
         for(char i : map.keySet()){
             pq.offer(new Pair(i, map.get(i)));
         }
-        String res = "";
+        StringBuilder res = new StringBuilder();
         while(!pq.isEmpty()){
             Pair r = pq.poll();
             for(int i=0; i<r.freq; i++){
-                res += r.e;
+                res.append(r.e);
             }
         }
-        return res;
+        return res.toString();
     }
 }
