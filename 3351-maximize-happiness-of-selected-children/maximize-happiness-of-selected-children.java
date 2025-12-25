@@ -1,19 +1,15 @@
 class Solution {
     public long maximumHappinessSum(int[] happiness, int k) {
-               Arrays.sort(happiness);
-        Stack<Integer> stack = new Stack<>();
-        for (int num : happiness) {
-            stack.add(num);
-        }
-        long max = 0;
-        int i = 0;
-        while (k-- != 0 && !stack.isEmpty()) {
-            int curr = stack.pop();
-            if ((curr - i) > 0) {
-                max += (curr - i);
+        Arrays.sort(happiness);
+        long sum = 0;
+        int n = happiness.length;
+
+        for (int i = 0; i < k; i++) {
+            int curr = happiness[n - 1 - i] - i;
+            if (curr > 0) {
+                sum += curr;
             }
-            i++;
         }
-        return max; 
+        return sum;
     }
 }
