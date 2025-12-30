@@ -1,33 +1,33 @@
 class Solution {
-  private static final int[][] DIRS = {{1, 0},  {0, 1}, {-1, 0}, {0, -1}};
+    private static final int[][] DIRS = {{1,0},{-1,0},{0,1},{0,-1}};
 
-  public int[][] updateMatrix(int[][] mat) {
-    int numRows = mat.length;
-    int numCols = mat[0].length;
-    int[][] distances = new int[numRows][numCols];
-    Queue<int[]> queue = new LinkedList<>();
-    for (int i = 0; i < numRows; i++) {
-      for (int j = 0; j < numCols; j++) {
-        if (mat[i][j] == 0) {
-          queue.add(new int[]{i, j});
-        } else {
-          distances[i][j] = Integer.MAX_VALUE;
+    public int[][] updateMatrix(int[][] mat) {
+        int m = mat.length, n = mat[0].length;
+        int[][] dist = new int[m][n];
+        Queue<int[]> q = new LinkedList<>();
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 0) {
+                    q.offer(new int[]{i, j});
+                } else {
+                    dist[i][j] = Integer.MAX_VALUE;
+                }
+            }
         }
-      }
-    }
-    while (!queue.isEmpty()) {
-      int[] removed = queue.remove();
-      int currX = removed[0];
-      int currY = removed[1];
-      for (int[] dir : DIRS) {
-        int newX = currX + dir[0];
-        int newY = currY + dir[1];
-        if (newX >= 0 && newY >= 0 && newX < numRows && newY < numCols && distances[newX][newY] > distances[currX][currY] + 1) {
-          queue.add(new int[]{newX, newY});
-          distances[newX][newY] = distances[currX][currY] + 1;
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            for (int[] d : DIRS) {
+                int x = cur[0] + d[0];
+                int y = cur[1] + d[1];
+                if (x >= 0 && y >= 0 && x < m && y < n &&
+                    dist[x][y] > dist[cur[0]][cur[1]] + 1) {
+                    dist[x][y] = dist[cur[0]][cur[1]] + 1;
+                    q.offer(new int[]{x, y});
+                }
+            }
         }
-      }
+        return dist;
     }
-    return distances;
-  }
 }
