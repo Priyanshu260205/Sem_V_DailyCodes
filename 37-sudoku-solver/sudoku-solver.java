@@ -1,68 +1,36 @@
 class Solution {
     public void solveSudoku(char[][] board) {
-                helper(0, 0, board);
+        backtrack(board);
     }
 
-    private boolean helper(int r, int c, char[][] board) {
-        if (r == 9) {
-            return true;
-        }
-
-        int nr = r;
-        int nc = c;
-
-        if (c == 8) {
-            nr += 1;
-            nc = 0;
-        } else {
-            nc += 1;
-        }
-
-        if (board[r][c] != '.') {
-            return helper(nr, nc, board);
-        }
-
-        for (char num = '1'; num <= '9'; num++) {
-            if (isValid(r, c, board, num)) {
-                board[r][c] = num;
-                if (helper(nr, nc, board)) {
-                    return true;
-                }
-                board[r][c] = '.';
-            }
-        }
-
-        return false;
-    }
-
-    private boolean isValid(int r, int c, char[][] board, char num) {
-        // Row
-        for (int i = 0; i < 9; i++) {
-            if (board[r][i] == num) {
-                return false;
-            }
-        }
-
-        // Column
-        for (int i = 0; i < 9; i++) {
-            if (board[i][c] == num) {
-                return false;
-            }
-        }
-
-        // Grid
-        // 9 * 9 - 0, 1, 2 - > 0 ,1 ,2 , 4/ 3= 1 
-        int sr = (r / 3) * 3;
-        int sc = (c / 3) * 3;
-
-        for (int i = sr; i < sr + 3; i++) {
-            for (int j = sc; j < sc + 3; j++) {
-                if (board[i][j] == num) {
+    public boolean backtrack(char[][] board){
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                if(board[i][j] == '.'){
+                    for(char num='1'; num<='9'; num++){
+                        if(isValid(board, i, j, num)){
+                            board[i][j] = num;
+                            if(backtrack(board)) return true;
+                            board[i][j] = '.';
+                        }
+                    }
                     return false;
                 }
             }
         }
+        return true;
+    }
 
+    public boolean isValid(char[][] board, int row, int col, char n){
+        for(int i=0; i<9; i++){
+            if(board[i][col] == n) return false;
+            if(board[row][i] == n) return false;
+
+            int nr = 3 * (row/3) + i/3;
+            int nc = 3 * (col/3) + i%3;
+            if(board[nr][nc] == n) return false;
+
+        }
         return true;
     }
 }
