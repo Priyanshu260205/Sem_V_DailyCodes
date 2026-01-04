@@ -1,6 +1,6 @@
 class Solution {
     public int numDecodings(String s) {
-        int n = s.length();
+    int n = s.length();
     int[] dp = new int[n + 1];
     dp[0] = 1; // Base case: empty string has 1 way
     dp[1] = s.charAt(0) == '0' ? 0 : 1;
