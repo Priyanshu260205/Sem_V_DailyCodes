@@ -3,7 +3,7 @@ class Solution {
         return LIS(nums);
     }
 
-    public static int LIS(int [] arr){
+    public int LIS(int [] arr){
         int dp[] = new int[arr.length];
         int len = 1;
         dp[0] = arr[0];
@@ -20,7 +20,7 @@ class Solution {
         return len;
     }
 
-    public static int BinarySearch(int[] dp, int left, int right, int target){
+    public int BinarySearch(int[] dp, int left, int right, int target){
         int idx = 0;
         while(left <= right){
             int mid = left + (right-left)/2;
