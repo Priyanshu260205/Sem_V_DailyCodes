@@ -5,27 +5,29 @@ class Solution {
         return res;
     }
 
-    private void backtrack(String s, int start,
-                           List<String> path,
-                           List<List<String>> res) {
-
-        if (start == s.length()) {
+    public void backtrack(String s, int start, List<String> path, List<List<String>> res){
+        if(start == s.length()){
             res.add(new ArrayList<>(path));
             return;
         }
 
-        for (int end = start; end < s.length(); end++) {
-            if (isPalindrome(s, start, end)) {
-                path.add(s.substring(start, end + 1));
-                backtrack(s, end + 1, path, res);
-                path.remove(path.size() - 1);
+        for(int i=start ;i<s.length(); i++){
+            if(isPalindrome(s.substring(start, i+1))){
+                path.add(s.substring(start, i+1));
+                backtrack(s, i+1, path, res);
+                path.remove(path.size()-1);
             }
         }
     }
 
-    private boolean isPalindrome(String s, int l, int r) {
-        while (l < r) {
-            if (s.charAt(l++) != s.charAt(r--)) return false;
+    public boolean isPalindrome(String sc){
+        int start = 0;
+        int end = sc.length()-1;
+
+        while(start < end){
+            if(!(sc.charAt(start++) == sc.charAt(end--))){
+                return false;
+            }
         }
         return true;
     }
