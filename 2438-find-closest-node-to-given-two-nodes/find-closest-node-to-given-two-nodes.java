@@ -10,10 +10,7 @@ class Solution {
             dist2[i] = -1;
         }
 
-        // distances from node1
         computeDistances(edges, node1, dist1);
-
-        // distances from node2
         computeDistances(edges, node2, dist2);
 
         int ans = -1;
