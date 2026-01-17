@@ -1,42 +1,49 @@
 class Solution {
     public int[] minimumTime(int n, int[][] edges, int[] disappear) {
-        List<int[]>[] adj = new ArrayList[n];
-        for (int i = 0; i < n; i++) adj[i] = new ArrayList<>();
-        for (int[] edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
-            int w = edge[2];
-            adj[u].add(new int[]{v, w});
-            adj[v].add(new int[]{u, w});
+        List<int[]>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
         }
 
-        int[] answer = new int[n];
-        Arrays.fill(answer, -1);
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
-        
-        if (disappear[0] > 0) {
-            pq.offer(new int[]{0, 0});
-            answer[0] = 0;
+        for (int[] e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            graph[u].add(new int[]{v, w});
+            graph[v].add(new int[]{u, w});
         }
+
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[0] = 0;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[]{0, 0}); // {time, node}
 
         while (!pq.isEmpty()) {
-            int[] current = pq.poll();
-            int time = current[0];
-            int u = current[1];
+            int[] cur = pq.poll();
+            int time = cur[0];
+            int u = cur[1];
 
-            if (time > answer[u] && answer[u] != -1) continue;
-            for (int[] neighbor : adj[u]) {
-                int v = neighbor[0];
-                int weight = neighbor[1];
-                int arrivalTime = time + weight;
+            if (time > dist[u]) continue;
 
-                if (arrivalTime < disappear[v] && (answer[v] == -1 || arrivalTime < answer[v])) {
-                    answer[v] = arrivalTime;
-                    pq.offer(new int[]{arrivalTime, v});
+            for (int[] nei : graph[u]) {
+                int v = nei[0];
+                int w = nei[1];
+                int newTime = time + w;
+
+                // Must arrive strictly before disappearance
+                if (newTime < disappear[v] && newTime < dist[v]) {
+                    dist[v] = newTime;
+                    pq.offer(new int[]{newTime, v});
                 }
             }
         }
 
-        return answer;
+        for (int i = 0; i < n; i++) {
+            if (dist[i] == Integer.MAX_VALUE) {
+                dist[i] = -1;
+            }
+        }
+
+        return dist;
     }
 }
