@@ -2,33 +2,27 @@ class Solution {
     public int primeSubarray(int[] nums, int k) {
         int[] prime = primeNumbers();
 
-        // queue for runtime min & max
         Deque<Integer> minDQ = new ArrayDeque<>(); // monotonic
         Deque<Integer> maxDQ = new ArrayDeque<>(); // monotonic
         Deque<Integer> primeDQ = new ArrayDeque<>();
 
-        int left = 0; // valid window index
-        int prevPrime = 0; // index of second last prime index
-        
-        int result = 0; // our result -- count of valid subarray
+        int left = 0;
+        int prevPrime = 0;
+        int result = 0;
 
         int n = nums.length;
         for(int i = 0; i < n; i++) {
             int ele = nums[i];
 
-            // curr ele is prime
             if(prime[ele] == 1) {
                 insertPrimeDQ(minDQ, maxDQ, nums, i);
                 if(!primeDQ.isEmpty()) prevPrime = primeDQ.peekLast(); 
                 primeDQ.addLast(i);
 
-                // validate window
                 while(nums[maxDQ.peekFirst()] - nums[minDQ.peekFirst()] > k) {
-                    // remove first prime present in current window
                     int tempInx = primeDQ.removeFirst();
-                    left = tempInx + 1; // may be next window is valid
+                    left = tempInx + 1;
 
-                    // remove form Dequeue
                     if(minDQ.peekFirst() <= tempInx) minDQ.removeFirst();
                     if(maxDQ.peekFirst() <= tempInx) maxDQ.removeFirst();
                 }
@@ -50,8 +44,6 @@ class Solution {
         Arrays.fill(prime, 1);
         prime[0] = 0;
         prime[1] = 0;
-
-        // start from 2
         for(int i = 2; i < n; i++) {
             if(i%2 == 0 && i > 2) continue;
             
