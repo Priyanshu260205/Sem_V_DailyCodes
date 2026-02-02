@@ -15,7 +15,6 @@ class Solution {
             res += head.val;
             head = head.next;
         }
-        
         return Integer.parseInt(res, 2);
     }
 }
