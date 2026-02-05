@@ -1,61 +1,68 @@
 class Solution {
-    class TrieNode {
-        TrieNode[] children = new TrieNode[26];
-        String word; // stores word at end node
-    }
-
+    static List<String> ll;
     public List<String> findWords(char[][] board, String[] words) {
-        TrieNode root = buildTrie(words);
-        Set<String> result = new HashSet<>();
-
-        int m = board.length, n = board[0].length;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                dfs(board, i, j, root, result);
+        ll = new ArrayList<>();
+        Trie t = new Trie();
+        for(String s : words){
+            t.insert(s);
+        }
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if(t.root.child.containsKey(board[i][j])){
+                    t.Search(board, i, j, t.root);
+                }
             }
         }
-        return new ArrayList<>(result);
+        return ll;
     }
 
-    private void dfs(char[][] board, int r, int c,
-                     TrieNode node, Set<String> result) {
+    static class Trie{
+        class Node{
+            char ch;
+            String isTerminal;
+            HashMap<Character, Node> child;
 
-        char ch = board[r][c];
-        if (ch == '#' || node.children[ch - 'a'] == null) return;
-
-        node = node.children[ch - 'a'];
-
-        if (node.word != null) {
-            result.add(node.word);
-            node.word = null; // avoid duplicates
-        }
-
-        board[r][c] = '#'; // mark visited
-
-        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
-        for (int[] d : dirs) {
-            int nr = r + d[0], nc = c + d[1];
-            if (nr >= 0 && nr < board.length &&
-                nc >= 0 && nc < board[0].length) {
-                dfs(board, nr, nc, node, result);
+            public Node(char ch){
+                this.ch = ch;
+                child = new HashMap<>();
             }
         }
+        private Node root = new Node('*');
 
-        board[r][c] = ch; // backtrack
-    }
-
-    private TrieNode buildTrie(String[] words) {
-        TrieNode root = new TrieNode();
-        for (String w : words) {
-            TrieNode curr = root;
-            for (char c : w.toCharArray()) {
-                int idx = c - 'a';
-                if (curr.children[idx] == null)
-                    curr.children[idx] = new TrieNode();
-                curr = curr.children[idx];
+        public void insert(String word){
+            Node curr = root;
+            for (int i = 0; i < word.length(); i++) {
+                char ch = word.charAt(i);
+                if(curr.child.containsKey(ch)){
+                    curr = curr.child.get(ch);
+                }
+                else{
+                    Node nn = new Node(ch);
+                    curr.child.put(ch, nn);
+                    curr = nn;
+                }
             }
-            curr.word = w;
+            curr.isTerminal = word;
         }
-        return root;
+
+        public void Search(char[][] maze, int i, int j, Node node){
+            if(i<0 || j<0 || i>=maze.length || j>=maze[0].length || !node.child.containsKey(maze[i][j])){
+                return;
+            }
+            char ch = maze[i][j];
+            node = node.child.get(ch);
+            if(node.isTerminal!=null){
+                ll.add(node.isTerminal);
+                node.isTerminal = null;
+            }
+            maze[i][j] = '*';
+
+            Search(maze, i+1, j, node);
+            Search(maze, i-1, j, node);
+            Search(maze, i, j+1, node);
+            Search(maze, i, j-1, node);
+
+            maze[i][j] = ch;
+        }
     }
 }
