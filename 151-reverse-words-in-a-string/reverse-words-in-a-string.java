@@ -6,8 +6,8 @@ class Solution {
 		StringBuilder res = new StringBuilder("");
 		for(int i = str.length-1; i>=0; i--)
 		{
-			if(i == 0) res.append(str[i]);
-            else res.append(str[i] + " ");
+            res.append(str[i]);
+            if(i != 0) res.append(" ");
 		}
 		
 		return res.toString();
